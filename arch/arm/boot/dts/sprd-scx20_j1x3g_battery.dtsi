@@ -23,7 +23,7 @@
 		vmode = <0>; /* 1=Voltage mode, 0=mixed mode */
 		alm_soc = <5>; /* SOC alm level %*/
 		alm_vbat = <3450>; /* Vbat alm level mV*/
-		rint = <330>; /*battery internal impedance*/
+		rint = <280>; /*battery internal impedance*/
 		cnom = <2040>; /* nominal capacity in mAh */
 		rsense_real = <198>; /* sense resistor 0.1mOhm from real environment*/
 		rsense_spec = <200>; /* sense resistor 0.1mOhm from specification*/
@@ -32,10 +32,10 @@
 		cnom_temp_tab = <1025 2040	/*value = 1000 + temp*/
 				 1010 1920
 				 1000 1830>;
-		rint_temp_tab = <1025 330
+		rint_temp_tab = <1025 280
 				 1010 430
 				 1000 500>;
-		ocv_table = <4354 100
+		ocv_table = <4360 100
 				4305 95
 				4247 90
 				4189 85
@@ -126,7 +126,7 @@
 		battery,recharge_check_count = <1>;
 		battery,recharge_condition_type = <4>; /* SEC_BATTERY_RECHARGE_CONDITION_VCELL */
 		battery,recharge_condition_soc = <95>;
-		battery,recharge_condition_vcell = <4350>;
+		battery,recharge_condition_vcell = <4340>;
 
 		battery,charging_total_time = <21600>;
 		battery,recharging_total_time = <5400>;
