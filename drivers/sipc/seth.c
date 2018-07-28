@@ -128,9 +128,16 @@ typedef struct SEth {
 #endif /* SETH_NAPI */
 } SEth;
 
+#ifdef CONFIG_SETH_GRO_DISABLE
+uint32_t seth_gro_enable = 0;
+#else
+uint32_t seth_gro_enable = 1;
+#endif
+
 #ifdef CONFIG_DEBUG_FS
 struct dentry *root = NULL;
 uint32_t seth_print_seq = 0;
+uint32_t seth_print_ipid;
 static int seth_debugfs_mknod(void *root, void * data);
 #endif
 
@@ -363,11 +370,10 @@ static int seth_rx_poll_handler(struct napi_struct * napi, int budget)
 		seth->stats.rx_bytes += skb->len;
 		seth->stats.rx_packets++;
 
-#ifdef CONFIG_SETH_GRO_DISABLE
-		netif_receive_skb(skb);
-#else
-		napi_gro_receive(napi, skb);
-#endif
+		if (likely(seth_gro_enable))
+			napi_gro_receive(napi, skb);
+		else
+			netif_receive_skb(skb);
 		/* update skb counter*/
 		skb_cnt++;
 	}
@@ -1140,6 +1146,10 @@ static int __init seth_debugfs_init(void)
 	}
 
 	debugfs_create_u32("print_seq", S_IRUGO, root, &seth_print_seq);
+	debugfs_create_u32("print_ipid", S_IRUGO,
+		root, &seth_print_ipid);
+	debugfs_create_u32("gro_enable", S_IRUGO,
+		root, &seth_gro_enable);
 
 	return 0;
 }
